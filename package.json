@@ -1,0 +1,24 @@
+{
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:setup": "node scripts/setup-db.mjs",
+    "db:seed-test-users": "node scripts/seed-test-users.mjs",
+    "email:test": "node scripts/test-email.mjs"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.3",
+    "mysql2": "^3.24.3",
+    "next": "16.2.6",
+    "nodemailer": "^8.0.10",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "zod": "^4.4.3"
+  },
+  "overrides": {
+    "postcss": "8.5.10"
+  }
+}
