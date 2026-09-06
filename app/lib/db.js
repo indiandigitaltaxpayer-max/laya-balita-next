@@ -44,20 +44,41 @@ function createClient(connection) {
   };
 }
 
-export function getPool() {
-  if (!process.env.DATABASE_URL) {
-    throw new Error('DATABASE_URL is not configured');
-  }
-
-  if (!pool) {
+function getConnectionOptions() {
+  if (process.env.DATABASE_URL) {
     const connectionUrl = new URL(process.env.DATABASE_URL);
 
-    pool = mysql.createPool({
+    return {
       host: connectionUrl.hostname,
       port: Number(connectionUrl.port || 3306),
       user: decodeURIComponent(connectionUrl.username),
       password: decodeURIComponent(connectionUrl.password),
       database: connectionUrl.pathname.replace(/^\//, ''),
+    };
+  }
+
+  if (
+    process.env.DB_HOST
+    && process.env.DB_NAME
+    && process.env.DB_USER
+    && process.env.DB_PASSWORD
+  ) {
+    return {
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT || 3306),
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+    };
+  }
+
+  throw new Error('Database connection is not configured');
+}
+
+export function getPool() {
+  if (!pool) {
+    pool = mysql.createPool({
+      ...getConnectionOptions(),
       waitForConnections: true,
       connectionLimit: Number(process.env.DB_CONNECTION_LIMIT || 10),
       namedPlaceholders: false,
