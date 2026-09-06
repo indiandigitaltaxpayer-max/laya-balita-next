@@ -1,6 +1,13 @@
 import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
+
+let resendClient;
 
 function isEmailConfigured() {
+  if (isResendConfigured()) {
+    return Boolean(process.env.ADMIN_EMAIL);
+  }
+
   return Boolean(
     process.env.SMTP_HOST
       && process.env.SMTP_PORT
@@ -17,6 +24,14 @@ function isSmtpConfigured() {
       && process.env.SMTP_USER
       && process.env.SMTP_PASS,
   );
+}
+
+function isResendConfigured() {
+  return process.env.EMAIL_PROVIDER === 'resend' && Boolean(process.env.RESEND_API_KEY);
+}
+
+function isTransactionalEmailConfigured() {
+  return isResendConfigured() || isSmtpConfigured();
 }
 
 function formatCurrency(amount = 0) {
@@ -248,6 +263,27 @@ function canLogOtpFallback() {
 }
 
 async function sendMail(message) {
+  if (isResendConfigured()) {
+    if (!resendClient) {
+      resendClient = new Resend(process.env.RESEND_API_KEY);
+    }
+
+    const { error } = await resendClient.emails.send({
+      from: message.from,
+      to: message.to,
+      replyTo: message.replyTo,
+      subject: message.subject,
+      html: message.html,
+      text: message.text,
+    });
+
+    if (error) {
+      throw new Error(error.message || 'Resend email could not be sent');
+    }
+
+    return { accepted: [message.to] };
+  }
+
   const transporter = createTransporter();
   const timeoutMs = Number(process.env.SMTP_TIMEOUT_MS || 12000);
   let timeoutId;
@@ -271,7 +307,7 @@ export async function sendAdminBookingEmail(booking) {
   if (!isEmailConfigured()) {
     return {
       sent: false,
-      reason: 'SMTP is not configured',
+      reason: 'Email provider or admin email is not configured',
     };
   }
 
@@ -293,7 +329,7 @@ export async function sendAdminCancellationEmail(booking) {
   if (!isEmailConfigured()) {
     return {
       sent: false,
-      reason: 'SMTP is not configured',
+      reason: 'Email provider or admin email is not configured',
     };
   }
 
@@ -312,10 +348,10 @@ export async function sendAdminCancellationEmail(booking) {
 }
 
 export async function sendGuestBookingConfirmationEmail(booking) {
-  if (!isSmtpConfigured()) {
+  if (!isTransactionalEmailConfigured()) {
     return {
       sent: false,
-      reason: 'SMTP is not configured',
+      reason: 'Email provider is not configured',
     };
   }
 
@@ -338,10 +374,10 @@ export async function sendGuestBookingConfirmationEmail(booking) {
 }
 
 export async function sendGuestBookingCancellationEmail(booking) {
-  if (!isSmtpConfigured()) {
+  if (!isTransactionalEmailConfigured()) {
     return {
       sent: false,
-      reason: 'SMTP is not configured',
+      reason: 'Email provider is not configured',
     };
   }
 
@@ -364,10 +400,10 @@ export async function sendGuestBookingCancellationEmail(booking) {
 }
 
 export async function sendLoginOtpEmail(email, otp) {
-  if (!isSmtpConfigured()) {
+  if (!isTransactionalEmailConfigured()) {
     return {
       sent: false,
-      reason: 'SMTP is not configured',
+      reason: 'Email provider is not configured',
     };
   }
 
