@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { jsonError, jsonOk, handleApiError } from '../../../../lib/api';
 import { requireAdmin } from '../../../../lib/auth';
-import { getPool, mapBookingRow } from '../../../../lib/db';
+import { getBookingRooms, getPool, mapBookingRow } from '../../../../lib/db';
 import {
   sendGuestBookingCancellationEmail,
   sendGuestBookingConfirmationEmail,
@@ -32,25 +32,42 @@ function getDateRange(checkIn, checkOut) {
   return dates;
 }
 
-async function assertDatesCanBeConfirmed(client, booking) {
+function getRoomsForBooking(booking, bookingRooms) {
+  return bookingRooms.length ? bookingRooms : [{
+    room_type_id: booking.room_type_id,
+    room_unit_id: booking.room_unit_id,
+  }].filter((room) => room.room_type_id && room.room_unit_id);
+}
+
+async function assertDatesCanBeConfirmed(client, booking, bookingRooms) {
+  const rooms = getRoomsForBooking(booking, bookingRooms);
+  const roomUnitIds = rooms.map((room) => room.room_unit_id);
+
+  if (!roomUnitIds.length) {
+    throw new Error('DATE_CONFLICT');
+  }
+
+  const placeholders = roomUnitIds.map((_, index) => `$${index + 1}`).join(', ');
+
   const conflictResult = await client.query(
     `SELECT 1
      FROM room_availability
-     WHERE room_unit_id = $1
-       AND available_date >= $2
-       AND available_date < $3
+     WHERE room_unit_id IN (${placeholders})
+       AND available_date >= $${roomUnitIds.length + 1}
+       AND available_date < $${roomUnitIds.length + 2}
        AND status IN ('BOOKED', 'BLOCKED')
-       AND (booking_id IS NULL OR booking_id <> $4)
+       AND (booking_id IS NULL OR booking_id <> $${roomUnitIds.length + 3})
      UNION ALL
      SELECT 1
-     FROM bookings
-     WHERE room_unit_id = $1
-       AND status = 'CONFIRMED'
-       AND id <> $4
-       AND check_in < $3
-       AND check_out > $2
+     FROM bookings b
+     LEFT JOIN booking_rooms br ON br.booking_id = b.id
+     WHERE COALESCE(br.room_unit_id, b.room_unit_id) IN (${placeholders})
+       AND b.status = 'CONFIRMED'
+       AND b.id <> $${roomUnitIds.length + 3}
+       AND b.check_in < $${roomUnitIds.length + 2}
+       AND b.check_out > $${roomUnitIds.length + 1}
      LIMIT 1`,
-    [booking.room_unit_id, booking.check_in, booking.check_out, booking.id],
+    [...roomUnitIds, booking.check_in, booking.check_out, booking.id],
   );
 
   if (conflictResult.rows.length) {
@@ -58,25 +75,29 @@ async function assertDatesCanBeConfirmed(client, booking) {
   }
 }
 
-async function markBookingDatesBooked(client, booking) {
-  for (const date of getDateRange(booking.check_in, booking.check_out)) {
-    await client.query(
-      `INSERT INTO room_availability (
-         room_type_id,
-         room_unit_id,
-         available_date,
-         status,
-         booking_id,
-         note
-       )
-       VALUES ($1, $2, $3, 'BOOKED', $4, 'Booked after admin confirmation')
-       ON DUPLICATE KEY UPDATE
-         status = 'BOOKED',
-         booking_id = VALUES(booking_id),
-         note = VALUES(note),
-         updated_at = NOW()`,
-      [booking.room_type_id, booking.room_unit_id, date, booking.id],
-    );
+async function markBookingDatesBooked(client, booking, bookingRooms) {
+  const rooms = getRoomsForBooking(booking, bookingRooms);
+
+  for (const room of rooms) {
+    for (const date of getDateRange(booking.check_in, booking.check_out)) {
+      await client.query(
+        `INSERT INTO room_availability (
+           room_type_id,
+           room_unit_id,
+           available_date,
+           status,
+           booking_id,
+           note
+         )
+         VALUES ($1, $2, $3, 'BOOKED', $4, 'Booked after admin confirmation')
+         ON DUPLICATE KEY UPDATE
+           status = 'BOOKED',
+           booking_id = VALUES(booking_id),
+           note = VALUES(note),
+           updated_at = NOW()`,
+        [room.room_type_id, room.room_unit_id, date, booking.id],
+      );
+    }
   }
 }
 
@@ -119,8 +140,10 @@ export async function PATCH(request, { params }) {
       return jsonError('Booking not found', 404);
     }
 
+    const currentBookingRooms = currentBooking ? await getBookingRooms(currentBooking.id, client) : [];
+
     if (payload.status === 'CONFIRMED') {
-      await assertDatesCanBeConfirmed(client, currentBooking);
+      await assertDatesCanBeConfirmed(client, currentBooking, currentBookingRooms);
     }
 
     const fields = [];
@@ -151,23 +174,25 @@ export async function PATCH(request, { params }) {
 
     const updatedResult = await client.query('SELECT * FROM bookings WHERE id = $1 LIMIT 1', [id]);
     const updatedBooking = updatedResult.rows[0];
+    const updatedBookingRooms = await getBookingRooms(updatedBooking.id, client);
 
     if (payload.status === 'CONFIRMED') {
-      await markBookingDatesBooked(client, updatedBooking);
+      await markBookingDatesBooked(client, updatedBooking, updatedBookingRooms);
     } else if (payload.status && payload.status !== 'CONFIRMED') {
       await releaseBookingDates(client, updatedBooking.id);
     }
 
     await client.query('COMMIT');
+    const mappedBooking = mapBookingRow(updatedBooking, updatedBookingRooms);
 
     let guestEmail = null;
 
     if (payload.status && payload.status !== previousStatus) {
       try {
         if (payload.status === 'CONFIRMED') {
-          guestEmail = await sendGuestBookingConfirmationEmail(updatedBooking);
+          guestEmail = await sendGuestBookingConfirmationEmail({ ...updatedBooking, rooms: mappedBooking.rooms });
         } else if (payload.status === 'CANCELLED') {
-          guestEmail = await sendGuestBookingCancellationEmail(updatedBooking);
+          guestEmail = await sendGuestBookingCancellationEmail({ ...updatedBooking, rooms: mappedBooking.rooms });
         }
       } catch (error) {
         guestEmail = {
@@ -177,7 +202,7 @@ export async function PATCH(request, { params }) {
       }
     }
 
-    return jsonOk({ booking: mapBookingRow(updatedBooking), guestEmail });
+    return jsonOk({ booking: mappedBooking, guestEmail });
   } catch (error) {
     await client?.query('ROLLBACK').catch(() => null);
 

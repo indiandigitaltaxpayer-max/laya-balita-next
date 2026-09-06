@@ -119,6 +119,7 @@ export default function BookingClient() {
   const [hasCheckedSession, setHasCheckedSession] = useState(false);
   const [selectedRoomName, setSelectedRoomName] = useState('');
   const [selectedRoomUnit, setSelectedRoomUnit] = useState('');
+  const [selectedRooms, setSelectedRooms] = useState([]);
   const [calendarMonth] = useState(getCurrentMonth);
   const [availabilityByDate, setAvailabilityByDate] = useState({});
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
@@ -227,10 +228,17 @@ export default function BookingClient() {
     [selectedRoom, selectedRoomUnit],
   );
 
+  const selectedRoomUnits = useMemo(
+    () => new Set(selectedRooms.map((room) => room.roomUnitId)),
+    [selectedRooms],
+  );
+
   const calendarDays = useMemo(
     () => buildCalendarDays(calendarMonth, availabilityByDate),
     [availabilityByDate, calendarMonth],
   );
+
+  const guestNumber = getGuestNumber(guestCount);
 
   useEffect(() => {
     if (!selectedRoom?.id) {
@@ -286,6 +294,15 @@ export default function BookingClient() {
     };
   }, [calendarMonth, selectedRoom?.id, selectedUnit?.id]);
 
+  useEffect(() => {
+    if (selectedRoom?.kind !== 'villa') return;
+
+    setSelectedRooms((current) => current.map((room) => ({
+      ...room,
+      guests: guestNumber,
+    })));
+  }, [guestNumber, selectedRoom?.kind]);
+
   const nights = useMemo(() => {
     if (!checkIn || !checkOut || checkOut <= checkIn) return 0;
 
@@ -293,28 +310,86 @@ export default function BookingClient() {
   }, [checkIn, checkOut]);
 
   const estimatedTotal = useMemo(() => {
-    if (!selectedRoom) return 0;
+    if (!selectedRooms.length) return 0;
 
-    const roomTotal = selectedRoom.ratePerNight * Math.max(nights, 1);
-    const breakfastTotal = breakfastOpted ? selectedRoom.breakfastCharge * Math.max(nights, 1) : 0;
+    const billableNights = Math.max(nights, 1);
+    const roomTotal = selectedRooms.reduce((sum, room) => sum + room.ratePerNight * billableNights, 0);
+    const breakfastTotal = breakfastOpted
+      ? selectedRooms.reduce((sum, room) => sum + room.breakfastCharge * room.guests * billableNights, 0)
+      : 0;
 
     return roomTotal + breakfastTotal;
-  }, [breakfastOpted, nights, selectedRoom]);
+  }, [breakfastOpted, nights, selectedRooms]);
 
-  const guestNumber = getGuestNumber(guestCount);
+  const selectedGuestTotal = useMemo(
+    () => selectedRooms.reduce((sum, room) => sum + room.guests, 0),
+    [selectedRooms],
+  );
+
   const recommendedKind = guestNumber > 8 ? 'villa' : 'room';
   const recommendationCopy = guestNumber > 8
     ? 'For this group size, an entire villa will usually be the most comfortable option.'
     : 'For this group size, private rooms are usually the easiest place to start.';
 
   function selectRoom(roomName) {
+    const room = availableRooms.find((item) => item.name === roomName);
     setSelectedRoomName(roomName);
     setSelectedRoomUnit('');
-    setBreakfastOpted(false);
+    if (room?.kind === 'villa') {
+      setSelectedRooms([]);
+    }
   }
 
   function selectRoomUnit(roomUnit) {
-    setSelectedRoomUnit(roomUnit);
+    if (!selectedRoom) return;
+
+    const unitCode = roomUnit.code || roomUnit;
+    const unitId = roomUnit.id || unitCode;
+    setSelectedRoomUnit(unitCode);
+
+    if (selectedRoom.kind === 'villa') {
+      setSelectedRooms([{
+        roomTypeId: selectedRoom.id,
+        roomUnitId: unitId,
+        roomName: selectedRoom.name,
+        roomCode: unitCode,
+        guests: guestNumber,
+        ratePerNight: selectedRoom.ratePerNight,
+        breakfastCharge: selectedRoom.breakfastCharge,
+      }]);
+      return;
+    }
+
+    setSelectedRooms((current) => {
+      const existing = current.find((room) => room.roomUnitId === unitId);
+
+      if (existing) {
+        return current.filter((room) => room.roomUnitId !== unitId);
+      }
+
+      return [
+        ...current,
+        {
+          roomTypeId: selectedRoom.id,
+          roomUnitId: unitId,
+          roomName: selectedRoom.name,
+          roomCode: unitCode,
+          guests: 1,
+          ratePerNight: selectedRoom.ratePerNight,
+          breakfastCharge: selectedRoom.breakfastCharge,
+        },
+      ];
+    });
+  }
+
+  function updateSelectedRoomGuests(roomUnitId, guests) {
+    setSelectedRooms((current) => current.map((room) => (
+      room.roomUnitId === roomUnitId ? { ...room, guests: Number(guests) || 1 } : room
+    )));
+  }
+
+  function removeSelectedRoom(roomUnitId) {
+    setSelectedRooms((current) => current.filter((room) => room.roomUnitId !== roomUnitId));
   }
 
   function selectCalendarDay(day) {
@@ -388,8 +463,8 @@ export default function BookingClient() {
   function submitBooking(event) {
     event.preventDefault();
 
-    if (!selectedRoomName || !selectedRoomUnit || !checkIn || !checkOut || !formData.name || !formData.email || !formData.phone) {
-      setSubmitMessage('Please select a room, room number, dates, and complete the contact details.');
+    if (!selectedRoomName || !selectedRooms.length || !checkIn || !checkOut || !formData.name || !formData.email || !formData.phone) {
+      setSubmitMessage('Please select at least one room, dates, and complete the contact details.');
       return;
     }
 
@@ -410,29 +485,31 @@ export default function BookingClient() {
   async function confirmBooking() {
     setIsSubmitting(true);
 
-    const selectedUnit = selectedRoom.units.find((unit) => (unit.code || unit) === selectedRoomUnit);
     const bookingPayload = {
       guestName: formData.name,
       guestEmail: formData.email,
       guestPhone: formData.phone,
-      roomTypeId: selectedRoom.id,
-      roomUnitId: selectedUnit?.id,
+      selectedRooms: selectedRooms.map((room) => ({
+        roomTypeId: room.roomTypeId,
+        roomUnitId: room.roomUnitId,
+        guests: room.guests,
+      })),
       checkIn,
       checkOut,
-      guests: guestCount,
+      guests: `${selectedGuestTotal || guestNumber} Guest${(selectedGuestTotal || guestNumber) === 1 ? '' : 's'}`,
       breakfastOpted,
     };
     const booking = {
       id: `LB-${Date.now().toString().slice(-6)}`,
-      room: selectedRoomName,
-      roomUnit: selectedRoomUnit,
+      room: selectedRooms.length === 1 ? selectedRooms[0].roomName : `${selectedRooms.length} Private Rooms`,
+      roomUnit: selectedRooms.map((room) => room.roomCode).join(', '),
       checkIn,
       checkOut,
-      guests: guestCount,
+      guests: bookingPayload.guests,
       nights,
-      ratePerNight: selectedRoom.ratePerNight,
+      ratePerNight: selectedRooms.reduce((sum, room) => sum + room.ratePerNight, 0),
       breakfastOpted,
-      breakfastCharge: selectedRoom.breakfastCharge,
+      breakfastCharge: selectedRooms.reduce((sum, room) => sum + room.breakfastCharge * room.guests, 0),
       breakfastComplimentary: false,
       estimatedTotal,
       status: 'Pending',
@@ -459,12 +536,10 @@ export default function BookingClient() {
         return;
       }
 
-      if (bookingPayload.roomTypeId && bookingPayload.roomUnitId) {
-        setSubmitMessage(data.error || 'Could not submit booking request.');
-        setShowSummaryModal(false);
-        setIsSubmitting(false);
-        return;
-      }
+      setSubmitMessage(data.error || 'Could not submit booking request.');
+      setShowSummaryModal(false);
+      setIsSubmitting(false);
+      return;
     } catch {
       // Fall back to local demo storage below.
     }
@@ -568,25 +643,67 @@ export default function BookingClient() {
             <div>
               <span className="selected-room-label">Choose Specific Room</span>
               <h3>{selectedRoom.name} room IDs</h3>
-              <p>Select one available room number for this request.</p>
+              <p>
+                {selectedRoom.kind === 'villa'
+                  ? 'Select one available villa for this request.'
+                  : 'Select one or more available rooms for this request.'}
+              </p>
             </div>
             <div className="room-unit-options">
               {selectedRoom.units.map((unit) => {
                 const unitCode = unit.code || unit;
+                const unitId = unit.id || unitCode;
 
                 return (
                 <button
                   type="button"
-                  className={`room-unit-option${selectedRoomUnit === unitCode ? ' selected' : ''}`}
+                  className={`room-unit-option${selectedRoomUnits.has(unitId) ? ' selected' : ''}`}
                   key={unitCode}
-                  onClick={() => selectRoomUnit(unitCode)}
+                  onClick={() => selectRoomUnit(unit)}
                 >
                   <AnimatedRoomImages images={unit.images || selectedRoom.images || [selectedRoom.image]} alt={unitCode} className="unit-room-images" />
                   <span>{unitCode}</span>
-                  <small>Available</small>
+                  <small>{selectedRoomUnits.has(unitId) ? 'Selected' : 'Available'}</small>
                 </button>
                 );
               })}
+            </div>
+          </div>
+        ) : null}
+
+        {selectedRooms.length ? (
+          <div className="selected-room-list" data-aos="fade-up">
+            <div>
+              <span className="selected-room-label">Rooms in this request</span>
+              <h3>{selectedRooms.length === 1 ? '1 selected stay' : `${selectedRooms.length} selected stays`}</h3>
+            </div>
+            <div className="selected-room-items">
+              {selectedRooms.map((room) => (
+                <div className="selected-room-item" key={room.roomUnitId}>
+                  <div>
+                    <strong>{room.roomName}</strong>
+                    <span>{room.roomCode} - {formatCurrency(room.ratePerNight)} / night</span>
+                    <small>Breakfast: {formatCurrency(room.breakfastCharge)} per guest / night</small>
+                  </div>
+                  <label>
+                    Guests
+                    <select
+                      value={room.guests}
+                      onChange={(event) => updateSelectedRoomGuests(room.roomUnitId, event.target.value)}
+                      disabled={selectedRoom?.kind === 'villa'}
+                    >
+                      {Array.from({ length: 8 }, (_, index) => index + 1).map((count) => (
+                        <option value={count} key={count}>{count}</option>
+                      ))}
+                    </select>
+                  </label>
+                  {selectedRoom?.kind !== 'villa' ? (
+                    <button type="button" onClick={() => removeSelectedRoom(room.roomUnitId)}>
+                      Remove
+                    </button>
+                  ) : null}
+                </div>
+              ))}
             </div>
           </div>
         ) : null}
@@ -645,20 +762,20 @@ export default function BookingClient() {
 
         <div className="row">
           <div className="col-md-8">
-            {selectedRoom ? (
-              <div className="room-card">
-                <AnimatedRoomImages images={selectedRoom.images || [selectedRoom.image]} alt={selectedRoom.name} className="selected-room-images" />
-                <div className="room-content">
-                  <h3>{selectedRoom.name}</h3>
-                  <p>{selectedRoom.description}</p>
+              {selectedRooms.length ? (
+                <div className="room-card">
+                  <AnimatedRoomImages images={selectedRoom.images || [selectedRoom.image]} alt={selectedRoom.name} className="selected-room-images" />
+                  <div className="room-content">
+                  <h3>{selectedRooms.length === 1 ? selectedRooms[0].roomName : `${selectedRooms.length} Private Rooms`}</h3>
+                  <p>{selectedRooms.length === 1 ? selectedRoom.description : 'Multiple rooms selected for this reservation request.'}</p>
                   <div className="room-price-summary">
                     <div>
                       <span>Room rate</span>
-                      <strong>{formatCurrency(selectedRoom.ratePerNight)} / night</strong>
+                      <strong>{formatCurrency(selectedRooms.reduce((sum, room) => sum + room.ratePerNight, 0))} / night</strong>
                     </div>
                     <div>
                       <span>Breakfast</span>
-                      <strong>{formatCurrency(selectedRoom.breakfastCharge)} / night</strong>
+                      <strong>{formatCurrency(selectedRooms.reduce((sum, room) => sum + room.breakfastCharge * room.guests, 0))} / night</strong>
                     </div>
                   </div>
                   <div className="room-features">
@@ -734,10 +851,13 @@ export default function BookingClient() {
                   <select
                     className="form-control"
                     value={selectedRoomUnit}
-                    onChange={(event) => selectRoomUnit(event.target.value)}
+                    onChange={(event) => {
+                      const unit = selectedRoom?.units.find((item) => (item.code || item) === event.target.value);
+                      if (unit) selectRoomUnit(unit);
+                    }}
                     disabled={!selectedRoom}
                   >
-                    <option value="" disabled>Select Room ID</option>
+                    <option value="" disabled>{selectedRoom?.kind === 'villa' ? 'Select Room ID' : 'Add Room ID'}</option>
                     {selectedRoom?.units.map((unit) => {
                       const unitCode = unit.code || unit;
                       return <option value={unitCode} key={unitCode}>{unitCode}</option>;
@@ -759,13 +879,13 @@ export default function BookingClient() {
                       />
                       Add breakfast
                     </label>
-                    <span>{formatCurrency(selectedRoom.breakfastCharge)} per night</span>
+                    <span>Per guest, per night</span>
                   </div>
                 ) : null}
-                {selectedRoom ? (
+                {selectedRooms.length ? (
                   <div className="booking-cost-summary">
-                    <div><span>Room</span><strong>{formatCurrency(selectedRoom.ratePerNight)} x {Math.max(nights, 1)} night{Math.max(nights, 1) === 1 ? '' : 's'}</strong></div>
-                    <div><span>Breakfast</span><strong>{breakfastOpted ? `${formatCurrency(selectedRoom.breakfastCharge)} x ${Math.max(nights, 1)}` : 'Not selected'}</strong></div>
+                    <div><span>Room</span><strong>{formatCurrency(selectedRooms.reduce((sum, room) => sum + room.ratePerNight, 0))} x {Math.max(nights, 1)} night{Math.max(nights, 1) === 1 ? '' : 's'}</strong></div>
+                    <div><span>Breakfast</span><strong>{breakfastOpted ? `${formatCurrency(selectedRooms.reduce((sum, room) => sum + room.breakfastCharge * room.guests, 0))} x ${Math.max(nights, 1)}` : 'Not selected'}</strong></div>
                     <div><span>Estimated total</span><strong>{formatCurrency(estimatedTotal)}</strong></div>
                   </div>
                 ) : null}
@@ -807,21 +927,23 @@ export default function BookingClient() {
                 <p>{formData.phone}</p>
               </div>
               <div>
-                <span>Room</span>
-                <strong>{selectedRoomName}</strong>
-                <p>{selectedRoomUnit}</p>
+                <span>Rooms</span>
+                <strong>{selectedRooms.length === 1 ? selectedRooms[0].roomName : `${selectedRooms.length} selected rooms`}</strong>
+                {selectedRooms.map((room) => (
+                  <p key={room.roomUnitId}>{room.roomCode} - {room.guests} guest{room.guests === 1 ? '' : 's'}</p>
+                ))}
               </div>
               <div>
                 <span>Stay</span>
                 <strong>{formatDate(checkIn)} - {formatDate(checkOut)}</strong>
-                <p>{guestCount}</p>
+                <p>{selectedGuestTotal} Guest{selectedGuestTotal === 1 ? '' : 's'}</p>
                 <p>{Math.max(nights, 1)} night{Math.max(nights, 1) === 1 ? '' : 's'}</p>
               </div>
               <div>
                 <span>Charges</span>
                 <strong>{formatCurrency(estimatedTotal)}</strong>
-                <p>Room: {selectedRoom ? formatCurrency(selectedRoom.ratePerNight) : ''} / night</p>
-                <p>Breakfast: {breakfastOpted && selectedRoom ? `${formatCurrency(selectedRoom.breakfastCharge)} / night` : 'Not selected'}</p>
+                <p>Room: {formatCurrency(selectedRooms.reduce((sum, room) => sum + room.ratePerNight, 0))} / night</p>
+                <p>Breakfast: {breakfastOpted ? `${formatCurrency(selectedRooms.reduce((sum, room) => sum + room.breakfastCharge * room.guests, 0))} / night` : 'Not selected'}</p>
               </div>
             </div>
             <p className="booking-summary-note">After confirmation, this request will be saved and sent to the admin email from the backend.</p>

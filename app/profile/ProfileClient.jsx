@@ -32,6 +32,12 @@ function formatDate(date) {
   }).format(normalizedDate);
 }
 
+function getBookingRooms(booking) {
+  return booking.rooms?.length
+    ? booking.rooms
+    : [{ room: booking.room, roomUnit: booking.roomUnit, guests: Number.parseInt(booking.guests, 10) || 1 }];
+}
+
 export default function ProfileClient() {
   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState(sampleUserReservations);
@@ -159,7 +165,9 @@ export default function ProfileClient() {
                 <div>
                   <span className="booking-id">{booking.bookingCode || booking.id}</span>
                   <h4>{booking.room}</h4>
-                  <p>{booking.guests}</p>
+                  {getBookingRooms(booking).map((room) => (
+                    <p key={`${booking.id}-${room.roomUnit}`}>{room.roomUnit || room.room} - {room.guests} guest{room.guests === 1 ? '' : 's'}</p>
+                  ))}
                 </div>
                 <div>
                   <span className="admin-label">Check-in</span>

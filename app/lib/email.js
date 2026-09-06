@@ -27,6 +27,34 @@ function formatCurrency(amount = 0) {
   }).format(amount);
 }
 
+function getBookingRooms(booking) {
+  if (Array.isArray(booking.rooms) && booking.rooms.length) {
+    return booking.rooms;
+  }
+
+  return [{
+    room: booking.room_name,
+    roomUnit: booking.room_code,
+    guests: Number.parseInt(String(booking.guests || '1'), 10) || 1,
+    ratePerNight: booking.rate_per_night,
+    breakfastCharge: booking.breakfast_charge,
+  }];
+}
+
+function formatRoomLine(room) {
+  return `${room.room} (${room.roomUnit}) - ${room.guests} guest${room.guests === 1 ? '' : 's'}, ${formatCurrency(room.ratePerNight)} / night`;
+}
+
+function formatRoomsText(booking) {
+  return getBookingRooms(booking).map(formatRoomLine).join('\n');
+}
+
+function formatRoomsHtml(booking) {
+  return getBookingRooms(booking)
+    .map((room) => `<li>${formatRoomLine(room)}</li>`)
+    .join('');
+}
+
 function formatBookingEmail(booking) {
   const breakfastCost = booking.breakfast_complimentary
     ? 'Complimentary'
@@ -40,15 +68,15 @@ Guest: ${booking.guest_name}
 Email: ${booking.guest_email}
 Phone: ${booking.guest_phone}
 
-Room Type: ${booking.room_name}
-Room ID: ${booking.room_code}
+Selected Rooms:
+${formatRoomsText(booking)}
 Check-in: ${booking.check_in}
 Check-out: ${booking.check_out}
 Guests: ${booking.guests}
 Nights: ${booking.nights}
 
-Room Rate: ${formatCurrency(booking.rate_per_night)} / night
-Breakfast: ${booking.breakfast_opted ? `Requested (${breakfastCost})` : 'Not requested'}
+Room Rate: ${formatCurrency(booking.rate_per_night)} / night total
+Breakfast: ${booking.breakfast_opted ? `Requested (${breakfastCost} / night total)` : 'Not requested'}
 Estimated Total: ${formatCurrency(booking.estimated_total)}
 
 Status: ${booking.status}
@@ -71,9 +99,10 @@ function formatBookingEmailHtml(booking) {
         <strong>Phone:</strong> ${booking.guest_phone}
       </p>
       <h3>Stay</h3>
+      <ul>
+        ${formatRoomsHtml(booking)}
+      </ul>
       <p>
-        <strong>Room Type:</strong> ${booking.room_name}<br />
-        <strong>Room ID:</strong> ${booking.room_code}<br />
         <strong>Check-in:</strong> ${booking.check_in}<br />
         <strong>Check-out:</strong> ${booking.check_out}<br />
         <strong>Guests:</strong> ${booking.guests}<br />
@@ -81,8 +110,8 @@ function formatBookingEmailHtml(booking) {
       </p>
       <h3>Charges</h3>
       <p>
-        <strong>Room Rate:</strong> ${formatCurrency(booking.rate_per_night)} / night<br />
-        <strong>Breakfast:</strong> ${booking.breakfast_opted ? `Requested (${breakfastCost})` : 'Not requested'}<br />
+        <strong>Room Rate:</strong> ${formatCurrency(booking.rate_per_night)} / night total<br />
+        <strong>Breakfast:</strong> ${booking.breakfast_opted ? `Requested (${breakfastCost} / night total)` : 'Not requested'}<br />
         <strong>Estimated Total:</strong> ${formatCurrency(booking.estimated_total)}
       </p>
       <p><strong>Status:</strong> ${booking.status}</p>
@@ -99,8 +128,8 @@ Guest: ${booking.guest_name}
 Email: ${booking.guest_email}
 Phone: ${booking.guest_phone}
 
-Room Type: ${booking.room_name}
-Room ID: ${booking.room_code}
+Selected Rooms:
+${formatRoomsText(booking)}
 Check-in: ${booking.check_in}
 Check-out: ${booking.check_out}
 Guests: ${booking.guests}
@@ -121,9 +150,10 @@ function formatCancellationEmailHtml(booking) {
         <strong>Phone:</strong> ${booking.guest_phone}
       </p>
       <h3>Stay</h3>
+      <ul>
+        ${formatRoomsHtml(booking)}
+      </ul>
       <p>
-        <strong>Room Type:</strong> ${booking.room_name}<br />
-        <strong>Room ID:</strong> ${booking.room_code}<br />
         <strong>Check-in:</strong> ${booking.check_in}<br />
         <strong>Check-out:</strong> ${booking.check_out}<br />
         <strong>Guests:</strong> ${booking.guests}
@@ -144,15 +174,15 @@ Dear ${booking.guest_name},
 Your reservation request at Laya Balita has been ${statusLabel}.
 
 Booking ID: ${booking.booking_code}
-Room Type: ${booking.room_name}
-Room ID: ${booking.room_code}
+Selected Rooms:
+${formatRoomsText(booking)}
 Check-in: ${booking.check_in}
 Check-out: ${booking.check_out}
 Guests: ${booking.guests}
 Nights: ${booking.nights}
 
-Room Rate: ${formatCurrency(booking.rate_per_night)} / night
-Breakfast: ${booking.breakfast_opted ? `Requested (${breakfastCost})` : 'Not requested'}
+Room Rate: ${formatCurrency(booking.rate_per_night)} / night total
+Breakfast: ${booking.breakfast_opted ? `Requested (${breakfastCost} / night total)` : 'Not requested'}
 Estimated Total: ${formatCurrency(booking.estimated_total)}
 
 For any changes or questions, please reply to this email.
@@ -174,9 +204,10 @@ function formatGuestStatusEmailHtml(booking, heading, message) {
       <p>${message}</p>
       <p><strong>Booking ID:</strong> ${booking.booking_code}</p>
       <h3>Stay Details</h3>
+      <ul>
+        ${formatRoomsHtml(booking)}
+      </ul>
       <p>
-        <strong>Room Type:</strong> ${booking.room_name}<br />
-        <strong>Room ID:</strong> ${booking.room_code}<br />
         <strong>Check-in:</strong> ${booking.check_in}<br />
         <strong>Check-out:</strong> ${booking.check_out}<br />
         <strong>Guests:</strong> ${booking.guests}<br />
@@ -184,8 +215,8 @@ function formatGuestStatusEmailHtml(booking, heading, message) {
       </p>
       <h3>Charges</h3>
       <p>
-        <strong>Room Rate:</strong> ${formatCurrency(booking.rate_per_night)} / night<br />
-        <strong>Breakfast:</strong> ${booking.breakfast_opted ? `Requested (${breakfastCost})` : 'Not requested'}<br />
+        <strong>Room Rate:</strong> ${formatCurrency(booking.rate_per_night)} / night total<br />
+        <strong>Breakfast:</strong> ${booking.breakfast_opted ? `Requested (${breakfastCost} / night total)` : 'Not requested'}<br />
         <strong>Estimated Total:</strong> ${formatCurrency(booking.estimated_total)}
       </p>
       <p>For any changes or questions, please reply to this email.</p>

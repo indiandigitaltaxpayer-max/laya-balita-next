@@ -81,7 +81,39 @@ function toDateOnly(value) {
   return String(value).slice(0, 10);
 }
 
-export function mapBookingRow(row) {
+function getLegacyGuestNumber(guests) {
+  return Number.parseInt(String(guests || '1'), 10) || 1;
+}
+
+export function mapBookingRoomRow(row) {
+  return {
+    id: row.id,
+    bookingId: row.booking_id,
+    roomTypeId: row.room_type_id,
+    roomUnitId: row.room_unit_id,
+    room: row.room_name,
+    roomUnit: row.room_code,
+    guests: Number(row.guests) || 1,
+    ratePerNight: row.rate_per_night,
+    breakfastCharge: row.breakfast_charge,
+  };
+}
+
+export function mapBookingRow(row, rooms = []) {
+  const mappedRooms = rooms.length
+    ? rooms.map(mapBookingRoomRow)
+    : [{
+      id: row.room_unit_id,
+      bookingId: row.id,
+      roomTypeId: row.room_type_id,
+      roomUnitId: row.room_unit_id,
+      room: row.room_name,
+      roomUnit: row.room_code,
+      guests: getLegacyGuestNumber(row.guests),
+      ratePerNight: row.rate_per_night,
+      breakfastCharge: row.breakfast_charge,
+    }].filter((room) => room.roomTypeId && room.roomUnitId);
+
   return {
     id: row.id,
     bookingCode: row.booking_code,
@@ -104,5 +136,36 @@ export function mapBookingRow(row) {
     estimatedTotal: row.estimated_total,
     status: row.status,
     createdAt: row.created_at,
+    rooms: mappedRooms,
   };
+}
+
+export async function getBookingRooms(bookingIds, db = { query }) {
+  const ids = Array.isArray(bookingIds) ? bookingIds.filter(Boolean) : [bookingIds].filter(Boolean);
+
+  if (!ids.length) return [];
+
+  const placeholders = ids.map((_, index) => `$${index + 1}`).join(', ');
+  const result = await db.query(
+    `SELECT *
+     FROM booking_rooms
+     WHERE booking_id IN (${placeholders})
+     ORDER BY created_at ASC`,
+    ids,
+  );
+
+  return result.rows;
+}
+
+export async function mapBookingsWithRooms(bookingRows, db = { query }) {
+  const rooms = await getBookingRooms(bookingRows.map((booking) => booking.id), db);
+  const roomsByBooking = new Map();
+
+  for (const room of rooms) {
+    const current = roomsByBooking.get(room.booking_id) || [];
+    current.push(room);
+    roomsByBooking.set(room.booking_id, current);
+  }
+
+  return bookingRows.map((booking) => mapBookingRow(booking, roomsByBooking.get(booking.id) || []));
 }

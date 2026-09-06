@@ -82,6 +82,23 @@ CREATE TABLE IF NOT EXISTS bookings (
   CONSTRAINT bookings_room_unit_fk FOREIGN KEY (room_unit_id) REFERENCES room_units(id) ON DELETE SET NULL
 );
 
+CREATE TABLE IF NOT EXISTS booking_rooms (
+  id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
+  booking_id CHAR(36) NOT NULL,
+  room_type_id CHAR(36) NOT NULL,
+  room_unit_id CHAR(36) NOT NULL,
+  room_name TEXT NOT NULL,
+  room_code TEXT NOT NULL,
+  guests INT NOT NULL DEFAULT 1,
+  rate_per_night INT NOT NULL,
+  breakfast_charge INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (booking_id, room_unit_id),
+  CONSTRAINT booking_rooms_booking_fk FOREIGN KEY (booking_id) REFERENCES bookings(id) ON DELETE CASCADE,
+  CONSTRAINT booking_rooms_room_type_fk FOREIGN KEY (room_type_id) REFERENCES room_types(id) ON DELETE RESTRICT,
+  CONSTRAINT booking_rooms_room_unit_fk FOREIGN KEY (room_unit_id) REFERENCES room_units(id) ON DELETE RESTRICT
+);
+
 CREATE TABLE IF NOT EXISTS room_availability (
   id CHAR(36) PRIMARY KEY DEFAULT (UUID()),
   room_type_id CHAR(36) NOT NULL,

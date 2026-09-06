@@ -5,6 +5,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:setup": "node scripts/setup-db.mjs",
+    "db:migrate-booking-rooms": "node scripts/migrate-booking-rooms.mjs",
     "db:seed-test-users": "node scripts/seed-test-users.mjs",
     "email:test": "node scripts/test-email.mjs"
   },

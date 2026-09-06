@@ -76,6 +76,12 @@ function formatCurrency(amount = 0) {
   }).format(amount);
 }
 
+function getBookingRooms(booking) {
+  return booking.rooms?.length
+    ? booking.rooms
+    : [{ room: booking.room, roomUnit: booking.roomUnit, guests: Number.parseInt(booking.guests, 10) || 1 }];
+}
+
 export default function AdminClient() {
   const [bookings, setBookings] = useState(sampleBookings);
   const [roomTypes, setRoomTypes] = useState([]);
@@ -421,7 +427,9 @@ export default function AdminClient() {
                 <div>
                   <span className="admin-label">Room</span>
                   <strong>{booking.room}</strong>
-                  <p>{booking.roomUnit || 'Room ID pending'}</p>
+                  {getBookingRooms(booking).map((room) => (
+                    <p key={`${booking.id}-${room.roomUnit}`}>{room.roomUnit || 'Room ID pending'} - {room.guests} guest{room.guests === 1 ? '' : 's'}</p>
+                  ))}
                 </div>
                 <div>
                   <span className="admin-label">Stay</span>
@@ -460,7 +468,10 @@ export default function AdminClient() {
               {selectedUserBookings.map((booking) => (
                 <article className="admin-history-row" key={`${booking.id}-history`}>
                   <span className="booking-id">{booking.bookingCode || booking.id}</span>
-                  <strong>{booking.room} {booking.roomUnit ? `(${booking.roomUnit})` : ''}</strong>
+                  <strong>{booking.room}</strong>
+                  {getBookingRooms(booking).map((room) => (
+                    <span key={`${booking.id}-${room.roomUnit}`}>{room.roomUnit || 'Room ID pending'} - {room.guests} guest{room.guests === 1 ? '' : 's'}</span>
+                  ))}
                   <span>{formatDate(booking.checkIn)} - {formatDate(booking.checkOut)}</span>
                   <span className={`status-badge ${booking.status.toLowerCase()}`}>{booking.status}</span>
                 </article>

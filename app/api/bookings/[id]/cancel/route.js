@@ -1,6 +1,6 @@
 import { jsonError, jsonOk, handleApiError } from '../../../../lib/api';
 import { requireSession } from '../../../../lib/auth';
-import { getPool, mapBookingRow } from '../../../../lib/db';
+import { getBookingRooms, getPool, mapBookingRow } from '../../../../lib/db';
 import { sendAdminCancellationEmail } from '../../../../lib/email';
 
 export async function POST(request, { params }) {
@@ -38,6 +38,7 @@ export async function POST(request, { params }) {
 
     const updatedResult = await client.query('SELECT * FROM bookings WHERE id = $1 LIMIT 1', [booking.id]);
     const updatedBooking = updatedResult.rows[0];
+    const updatedBookingRooms = await getBookingRooms(updatedBooking.id, client);
 
     await client.query(
       `DELETE FROM room_availability
@@ -48,8 +49,9 @@ export async function POST(request, { params }) {
     await client.query('COMMIT');
 
     let email;
+    const mappedBooking = mapBookingRow(updatedBooking, updatedBookingRooms);
     try {
-      email = await sendAdminCancellationEmail(updatedBooking);
+      email = await sendAdminCancellationEmail({ ...updatedBooking, rooms: mappedBooking.rooms });
     } catch (error) {
       email = {
         sent: false,
@@ -58,7 +60,7 @@ export async function POST(request, { params }) {
     }
 
     return jsonOk({
-      booking: mapBookingRow(updatedBooking),
+      booking: mappedBooking,
       email,
     });
   } catch (error) {
