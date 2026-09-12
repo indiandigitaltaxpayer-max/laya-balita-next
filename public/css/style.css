@@ -1203,6 +1203,13 @@ textarea.form-control {
   line-height: 1.7;
 }
 
+.about-host-image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center;
+}
+
 .home-stay-heading span,
 .home-stay-heading strong {
   display: block;

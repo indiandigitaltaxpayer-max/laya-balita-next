@@ -2,20 +2,6 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
-const sampleUserReservations = [
-  {
-    id: 'LB-204501',
-    name: 'Demo Guest',
-    email: 'guest@example.com',
-    phone: '+91 99999 88888',
-    room: 'Queen Room',
-    checkIn: '2026-08-10',
-    checkOut: '2026-08-13',
-    guests: '2 Guests',
-    status: 'CONFIRMED',
-  },
-];
-
 function formatDate(date) {
   if (!date) return 'Not selected';
 
@@ -40,7 +26,7 @@ function getBookingRooms(booking) {
 
 export default function ProfileClient() {
   const [user, setUser] = useState(null);
-  const [bookings, setBookings] = useState(sampleUserReservations);
+  const [bookings, setBookings] = useState([]);
   const [cancelingId, setCancelingId] = useState('');
   const [actionMessage, setActionMessage] = useState('');
 
@@ -66,17 +52,17 @@ export default function ProfileClient() {
 
         if (bookingsResponse.ok) {
           const bookingsData = await bookingsResponse.json();
-          setBookings(bookingsData.bookings.length ? bookingsData.bookings : sampleUserReservations);
+          setBookings(bookingsData.bookings || []);
           return;
         }
       } catch {
-        // Keep local demo fallback below.
+        // Keep bookings empty unless local demo bookings exist.
       }
 
       const savedBookings = JSON.parse(window.localStorage.getItem('layaBalitaBookings') || '[]');
       if (savedUser?.email) {
         const userBookings = savedBookings.filter((booking) => booking.email === savedUser.email);
-        setBookings(userBookings.length ? userBookings : sampleUserReservations);
+        setBookings(userBookings);
       }
     }
 
@@ -159,8 +145,9 @@ export default function ProfileClient() {
             <span>{bookings.length} records</span>
           </div>
           {actionMessage ? <p className="profile-action-message">{actionMessage}</p> : null}
-          <div className="admin-booking-list">
-            {bookings.map((booking) => (
+          {bookings.length ? (
+            <div className="admin-booking-list">
+              {bookings.map((booking) => (
               <article className="admin-booking-row profile-booking-row" key={booking.id}>
                 <div>
                   <span className="booking-id">{booking.bookingCode || booking.id}</span>
@@ -192,8 +179,14 @@ export default function ProfileClient() {
                   ) : null}
                 </div>
               </article>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="booking-empty-state">
+              <h3>No reservations yet</h3>
+              <p>Your confirmed and requested stays will appear here after you submit a reservation request.</p>
+            </div>
+          )}
         </div>
       </div>
     </section>

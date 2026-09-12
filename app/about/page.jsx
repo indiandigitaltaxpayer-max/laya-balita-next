@@ -68,28 +68,25 @@ export default function Page() {
             <div className="row">
               <div className="col-lg-4 col-md-6 col-sm-6 col-12 post" data-aos="fade-up" data-aos-delay={100}>
                 <div className="media media-custom d-block mb-4">
-                  <a href="#" className="mb-4 d-block"><img src="/img/person_3.jpg" alt="Image placeholder" className="img-fluid" /></a>
+                  <a href="#" className="mb-4 d-block"><img src="/img/ajayakumar.png" alt="Ajayakumar" className="img-fluid about-host-image" /></a>
                   <div className="media-body">
-                    <span className="meta-post">CEO, Co-Founder</span>
-                    <h2 className="mt-0 mb-3"><a href="#">Vince Richardson</a></h2>
+                    <h2 className="mt-0 mb-3"><a href="#">Ajayakumar</a></h2>
                   </div>
                 </div>
               </div>
               <div className="col-lg-4 col-md-6 col-sm-6 col-12 post" data-aos="fade-up" data-aos-delay={200}>
                 <div className="media media-custom d-block mb-4">
-                  <a href="#" className="mb-4 d-block"><img src="/img/person_1.jpg" alt="Image placeholder" className="img-fluid" /></a>
+                  <a href="#" className="mb-4 d-block"><img src="/img/bindu.png" alt="Bindu" className="img-fluid about-host-image" /></a>
                   <div className="media-body">
-                    <span className="meta-post">CTO, Co-Founder</span>
-                    <h2 className="mt-0 mb-3"><a href="#">Jean Love</a></h2>
+                    <h2 className="mt-0 mb-3"><a href="#">Bindu</a></h2>
                   </div>
                 </div>
               </div>
               <div className="col-lg-4 col-md-6 col-sm-6 col-12 post" data-aos="fade-up" data-aos-delay={300}>
                 <div className="media media-custom d-block mb-4">
-                  <a href="#" className="mb-4 d-block"><img src="/img/person_2.jpg" alt="Image placeholder" className="img-fluid" /></a>
+                  <a href="#" className="mb-4 d-block"><img src="/img/ashwan.jpeg" alt="Ashwan" className="img-fluid about-host-image" /></a>
                   <div className="media-body">
-                    <span className="meta-post">Marketer, Co-Founder</span>
-                    <h2 className="mt-0 mb-3"><a href="#">Jeff Stark</a></h2>
+                    <h2 className="mt-0 mb-3"><a href="#">Ashwan</a></h2>
                   </div>
                 </div>
               </div>
