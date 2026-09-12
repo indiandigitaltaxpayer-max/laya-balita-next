@@ -70,6 +70,7 @@ export default function Page() {
                 <div className="media media-custom d-block mb-4">
                   <a href="#" className="mb-4 d-block"><img src="/img/ajayakumar.png" alt="Ajayakumar" className="img-fluid about-host-image" /></a>
                   <div className="media-body">
+                    <span className="meta-post">Founder</span>
                     <h2 className="mt-0 mb-3"><a href="#">Ajayakumar</a></h2>
                   </div>
                 </div>
@@ -78,6 +79,7 @@ export default function Page() {
                 <div className="media media-custom d-block mb-4">
                   <a href="#" className="mb-4 d-block"><img src="/img/bindu.png" alt="Bindu" className="img-fluid about-host-image" /></a>
                   <div className="media-body">
+                    <span className="meta-post">Hospitality and Guest Relations</span>
                     <h2 className="mt-0 mb-3"><a href="#">Bindu</a></h2>
                   </div>
                 </div>
@@ -86,6 +88,7 @@ export default function Page() {
                 <div className="media media-custom d-block mb-4">
                   <a href="#" className="mb-4 d-block"><img src="/img/ashwan.jpeg" alt="Ashwan" className="img-fluid about-host-image" /></a>
                   <div className="media-body">
+                    <span className="meta-post">Creative Director</span>
                     <h2 className="mt-0 mb-3"><a href="#">Ashwan</a></h2>
                   </div>
                 </div>
