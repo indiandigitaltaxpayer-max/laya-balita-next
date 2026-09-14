@@ -163,8 +163,10 @@ export const roomImageGalleries = {
   'The Nook Villa': nookImages,
   'The Verdant Villa': verdantImages,
   'Balcony King Room': [
+    ...room103Images,
     ...room104Images,
     ...room206Images,
+    ...room304Images,
   ],
   'King Room': [
     ...room101Images,
@@ -185,6 +187,58 @@ export const roomImageGalleries = {
   'Economy Twin Room': [
     ...room201Images,
     ...room302Images,
+  ],
+};
+
+export const roomCardImageGalleries = {
+  'Balcony King Room': [
+    room103Images[0],
+    room104Images[0],
+    room206Images[0],
+    room304Images[0],
+    room103Images[1],
+  ],
+  'King Room': [
+    room101Images[0],
+    room102Images[0],
+    room101Images[1],
+    room102Images[1],
+    room101Images[2],
+  ],
+  'Queen Room': [
+    room105Images[0],
+    room204Images[0],
+    room305Images[0],
+    room105Images[1],
+    room204Images[1],
+  ],
+  'Balcony Twin Room': [
+    room205Images[0],
+    room205Images[1],
+    room205Images[2],
+    room205Images[3],
+    room205Images[4],
+  ],
+  'Twin Room': [
+    room303Images[0],
+    room306Images[0],
+    room303Images[1],
+    room306Images[1],
+    room303Images[2],
+  ],
+  'Economy Queen Room': [
+    room301Images[0],
+    room301Images[1],
+    room301Images[2],
+    room301Images[3],
+    room301Images[4],
+  ],
+  'Economy Twin Room': [
+    room201Images[0],
+    room302Images[0],
+    room201Images[1],
+    room302Images[1],
+    room201Images[2],
   ],
 };
 
@@ -230,6 +284,10 @@ export const roomUnitImageGalleries = {
 
 export function getRoomImages(roomName, fallbackImage) {
   return roomImageGalleries[roomName] || (fallbackImage ? [fallbackImage] : []);
+}
+
+export function getRoomCardImages(roomName, fallbackImage) {
+  return roomCardImageGalleries[roomName] || getRoomImages(roomName, fallbackImage).slice(0, 5);
 }
 
 export function getRoomUnitImages(roomCode, roomName, fallbackImage) {

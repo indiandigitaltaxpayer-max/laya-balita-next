@@ -1,4 +1,4 @@
-import { getRoomImages, getRoomUnitImages } from './roomImages';
+import { getRoomCardImages, getRoomImages, getRoomUnitImages } from './roomImages';
 
 export const rooms = [
   {
@@ -103,6 +103,7 @@ export const rooms = [
   },
 ].map((room) => ({
   ...room,
+  cardImages: getRoomCardImages(room.name, room.image),
   images: getRoomImages(room.name, room.image),
   units: room.units.map((unit) => ({
     code: unit,

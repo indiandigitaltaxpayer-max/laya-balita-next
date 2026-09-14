@@ -188,7 +188,7 @@ export default function Page() {
               {privateRoomTypes.map((room, index) => (
                 <article className="hotel-room-card" key={room.name} data-aos="fade-up" data-aos-delay={index * 100}>
                   <div className="hotel-room-media">
-                    <RoomImageGallery images={room.images || [room.image]} title={room.name} />
+                    <RoomImageGallery images={room.cardImages || room.images || [room.image]} title={room.name} />
                   </div>
                   <div className="hotel-room-body">
                     <h3>{room.name}</h3>

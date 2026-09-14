@@ -60,8 +60,14 @@ export default function RoomDetail({ detail }) {
 
         <section className="section villa-detail-band">
           <div className="container">
+            <div className="row justify-content-center text-center mb-5">
+              <div className="col-md-8">
+                <span className="hotel-section-eyebrow">Room Gallery</span>
+                <h2 className="hotel-section-heading">Explore the space</h2>
+              </div>
+            </div>
             <div className="room-detail-gallery">
-              {(room.images || [room.image]).slice(0, 4).map((image, index) => (
+              {(room.images || [room.image]).map((image, index) => (
                 <img src={image} alt={`${detail.name} representative ${index + 1}`} key={image} />
               ))}
             </div>
