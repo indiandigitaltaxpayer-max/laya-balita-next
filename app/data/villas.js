@@ -4,7 +4,7 @@ export const villas = {
     name: 'The Azure Villa',
     eyebrow: 'The Azure Villa',
     tagline: 'Spacious living, thoughtful comfort, and room for everyone to feel at home.',
-    heroImage: '/img/rooms/H1/Property%20Photos/IMG_7318.jpg',
+    heroImage: '/img/rooms/H1/Property%20Photos/optimized/azure_ext_1.webp',
     introHeading: 'A place where everyone can stay together.',
     intro: [
       "The Azure Villa is the most spacious of our three villas, designed for families and groups who value both togetherness and personal space. With five air-conditioned bedrooms, generous common areas, a kitchen for light cooking, and inviting spaces to gather, it offers the comfort of staying under one roof while allowing everyone to unwind at their own pace.",
@@ -24,11 +24,11 @@ export const villas = {
       ['fa-wifi', 'Complimentary Wi-Fi'],
     ],
     spaces: [
-      ['Living Areas', "Two spacious living halls offer plenty of room to relax together, whether you're planning the day's adventures or winding down in the evening.", '/img/rooms/H1/Property%20Photos/IMG_7320.jpg'],
-      ['Kitchen', 'A functional kitchen is available for light cooking, making longer stays and family trips more convenient. Additional arrangements can be made on request.', '/img/rooms/H1/Property%20Photos/IMG_7321.jpg'],
-      ['Dining', 'Enjoy meals together around a shared dining space, perfect for leisurely breakfasts or takeaway dinners after a day exploring Varkala.', '/img/rooms/H1/Property%20Photos/IMG_7324.jpg'],
-      ['Open Veranda', 'The first-floor veranda provides a comfortable outdoor seating area where you can enjoy the fresh air, read a book, or simply slow down for a while.', '/img/rooms/H1/Property%20Photos/IMG_7423.jpg'],
-      ['Garden', 'A small tropical garden surrounds parts of the villa, adding greenery and a peaceful atmosphere to your stay.', '/img/rooms/H1/Property%20Photos/IMG_7482.jpg'],
+      ['Living Areas', "Two spacious living halls offer plenty of room to relax together, whether you're planning the day's adventures or winding down in the evening.", '/img/rooms/H1/Property%20Photos/optimized/azure_living_1.webp'],
+      ['Kitchen', 'A functional kitchen is available for light cooking, making longer stays and family trips more convenient. Additional arrangements can be made on request.', '/img/rooms/H1/Property%20Photos/optimized/azure_kitchen_1.webp'],
+      ['Dining', 'Enjoy meals together around a shared dining space, perfect for leisurely breakfasts or takeaway dinners after a day exploring Varkala.', '/img/rooms/H1/Property%20Photos/optimized/azure_dining_1.webp'],
+      ['Open Veranda', 'The first-floor veranda provides a comfortable outdoor seating area where you can enjoy the fresh air, read a book, or simply slow down for a while.', '/img/rooms/H1/Property%20Photos/optimized/azure_sitout_1.webp'],
+      ['Garden', 'A small tropical garden surrounds parts of the villa, adding greenery and a peaceful atmosphere to your stay.', '/img/rooms/H1/Property%20Photos/optimized/azure_ext_2.webp'],
     ],
     layout: [
       ['Ground Floor', ['King Bedroom x2']],
@@ -57,7 +57,7 @@ export const villas = {
     name: 'The Nook Villa',
     eyebrow: 'The Nook Villa',
     tagline: 'Comfortable spaces for shared stays.',
-    heroImage: '/img/rooms/H2/Property%20Photos/Front.jpg',
+    heroImage: '/img/rooms/H2/Property%20Photos/optimized/nook_ext_1.webp',
     introHeading: 'Comfort made simple.',
     intro: [
       'The Nook Villa offers a practical and comfortable setting for families and groups looking to stay together without unnecessary complexity. With six private bedrooms, generous common halls, and a shared balcony, it provides plenty of room to relax after a day exploring Varkala.',
@@ -75,10 +75,10 @@ export const villas = {
       ['fa-bath', 'En-suite Bathrooms'],
     ],
     spaces: [
-      ['Living Areas', 'Two generous halls create comfortable spaces where guests naturally gather to chat, play games, or simply unwind together.', '/img/rooms/H2/Property%20Photos/IMG_7287.jpg'],
-      ['Dining Area', "A shared dining space makes meals together easy, whether you've ordered in or brought back local treats from Varkala.", '/img/rooms/H2/Property%20Photos/IMG_7291.jpg'],
-      ['Shared Balcony', 'The first-floor balcony offers a pleasant spot to enjoy a quiet morning or catch the evening breeze.', '/img/rooms/H2/Property%20Photos/Front.jpg'],
-      ['Garden', 'Green surroundings add a calm atmosphere throughout the property.', '/img/rooms/H2/Property%20Photos/Front.jpg'],
+      ['Living Areas', 'Two generous halls create comfortable spaces where guests naturally gather to chat, play games, or simply unwind together.', '/img/rooms/H2/Property%20Photos/optimized/nook_ext_2.webp'],
+      ['Dining Area', "A shared dining space makes meals together easy, whether you've ordered in or brought back local treats from Varkala.", '/img/rooms/H2/Property%20Photos/optimized/nook_ext_3.webp'],
+      ['Shared Balcony', 'The first-floor balcony offers a pleasant spot to enjoy a quiet morning or catch the evening breeze.', '/img/rooms/H2/Property%20Photos/optimized/nook_ext_1.webp'],
+      ['Garden', 'Green surroundings add a calm atmosphere throughout the property.', '/img/rooms/H2/Property%20Photos/optimized/nook_ext_1.webp'],
     ],
     layout: [
       ['Ground Floor', ['Twin (Non AC)', 'Twin (Non AC)', 'Twin (AC)']],
@@ -109,7 +109,7 @@ export const villas = {
     name: 'The Verdant Villa',
     eyebrow: 'The Verdant Villa',
     tagline: 'Where Keralam feels like home.',
-    heroImage: '/img/rooms/H3/Property%20Photos/IMG_6984.jpg',
+    heroImage: '/img/rooms/H3/Property%20Photos/optimized/verdant_garden_1.webp',
     introHeading: 'Thoughtfully designed for slower days together.',
     intro: [
       'Surrounded by tropical greenery and inspired by the character of traditional Keralam homes, The Verdant Villa offers a comfortable setting where families and groups can enjoy both shared moments and quiet personal space.',
@@ -128,11 +128,11 @@ export const villas = {
       ['fa-wifi', 'Complimentary Wi-Fi'],
     ],
     spaces: [
-      ['Living Area', "A welcoming common space where everyone can come together to relax, share stories from the day, or simply enjoy each other's company.", '/img/rooms/H3/Property%20Photos/IMG_6915.jpg'],
-      ['Kitchen', 'A practical kitchen is available for light cooking, making family meals and longer stays more convenient.', '/img/rooms/H3/Property%20Photos/IMG_6871.jpg'],
-      ['Dining', 'A shared dining area encourages slow breakfasts, home-cooked meals, and conversations that continue long after dinner.', '/img/rooms/H3/Property%20Photos/IMG_6874.jpg'],
-      ['Open Veranda', 'The spacious first-floor veranda offers a peaceful place to enjoy fresh air or an evening breeze beneath the tiled roof.', '/img/rooms/H3/Property%20Photos/IMG_6875.jpg'],
-      ['Garden', 'Surrounded by tropical plants, the garden features a small seating area, a traditional well, and space for a cosy evening around a small fire.', '/img/rooms/H3/Property%20Photos/IMG_6984.jpg'],
+      ['Living Area', "A welcoming common space where everyone can come together to relax, share stories from the day, or simply enjoy each other's company.", '/img/rooms/H3/Property%20Photos/optimized/verdant_living_1.webp'],
+      ['Kitchen', 'A practical kitchen is available for light cooking, making family meals and longer stays more convenient.', '/img/rooms/H3/Property%20Photos/optimized/verdant_living_2.webp'],
+      ['Dining', 'A shared dining area encourages slow breakfasts, home-cooked meals, and conversations that continue long after dinner.', '/img/rooms/H3/Property%20Photos/optimized/verdant_living_3.webp'],
+      ['Open Veranda', 'The spacious first-floor veranda offers a peaceful place to enjoy fresh air or an evening breeze beneath the tiled roof.', '/img/rooms/H3/Property%20Photos/optimized/verdant_sitout_1.webp'],
+      ['Garden', 'Surrounded by tropical plants, the garden features a small seating area, a traditional well, and space for a cosy evening around a small fire.', '/img/rooms/H3/Property%20Photos/optimized/verdant_garden_1.webp'],
     ],
     layout: [
       ['Ground Floor', ['Queen Room (Non-AC)', 'Twin Room (Non-AC)', 'Twin Room (AC)']],

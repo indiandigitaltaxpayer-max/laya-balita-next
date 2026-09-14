@@ -4,7 +4,7 @@ export const rooms = [
   {
     name: 'The Azure Villa',
     kind: 'villa',
-    image: '/img/rooms/H1/Property%20Photos/IMG_7318.jpg',
+    image: '/img/rooms/H1/Property%20Photos/optimized/azure_ext_1.webp',
     description: 'The most spacious villa in our collection, offering five air-conditioned bedrooms, generous common areas, and room for everyone to stay together.',
     ratePerNight: 28000,
     breakfastCharge: 450,
@@ -14,7 +14,7 @@ export const rooms = [
   {
     name: 'The Nook Villa',
     kind: 'villa',
-    image: '/img/rooms/H2/Property%20Photos/Front.jpg',
+    image: '/img/rooms/H2/Property%20Photos/optimized/nook_ext_1.webp',
     description: 'A relaxed group villa with six bedrooms, flexible AC and fan-cooled rooms, spacious common halls, and a shared balcony.',
     ratePerNight: 30000,
     breakfastCharge: 450,
@@ -24,7 +24,7 @@ export const rooms = [
   {
     name: 'The Verdant Villa',
     kind: 'villa',
-    image: '/img/rooms/H3/Property%20Photos/IMG_6984.jpg',
+    image: '/img/rooms/H3/Property%20Photos/optimized/verdant_garden_1.webp',
     description: 'A warm Keralam-style villa surrounded by tropical greenery, with six bedrooms, a kitchen, open veranda, and garden seating.',
     ratePerNight: 30000,
     breakfastCharge: 450,
@@ -34,7 +34,7 @@ export const rooms = [
   {
     name: 'Balcony King Room',
     kind: 'room',
-    image: '/img/rooms/H1/103/IMG_7367.jpg',
+    image: '/img/rooms/H1/103/optimized/103_bed_1.jpg',
     description: 'A spacious king room designed for couples who appreciate a little extra space and the comfort of a private balcony.',
     ratePerNight: 5200,
     breakfastCharge: 400,
@@ -44,7 +44,7 @@ export const rooms = [
   {
     name: 'King Room',
     kind: 'room',
-    image: '/img/rooms/H1/101/IMG_7418.png',
+    image: '/img/rooms/H1/101/optimized/101_bed_1.webp',
     description: "Bright, comfortable, and thoughtfully designed for couples or solo travellers looking for a relaxed stay near Varkala's South Cliff.",
     ratePerNight: 4800,
     breakfastCharge: 350,
@@ -54,7 +54,7 @@ export const rooms = [
   {
     name: 'Queen Room',
     kind: 'room',
-    image: '/img/rooms/H1/105/IMG_7311.jpg',
+    image: '/img/rooms/H1/105/optimized/105_bed_1.webp',
     description: 'A compact, cosy, and comfortable choice for couples seeking everything they need for a peaceful stay.',
     ratePerNight: 4500,
     breakfastCharge: 350,
@@ -64,7 +64,7 @@ export const rooms = [
   {
     name: 'Balcony Twin Room',
     kind: 'room',
-    image: '/img/rooms/H2/205/IMG_7148.jpg',
+    image: '/img/rooms/H2/205/optimized/205_bed_1.webp',
     description: 'A great option for friends travelling together, combining the practicality of twin beds with the added comfort of a private balcony.',
     ratePerNight: 4700,
     breakfastCharge: 350,
@@ -74,7 +74,7 @@ export const rooms = [
   {
     name: 'Twin Room',
     kind: 'room',
-    image: '/img/rooms/H3/303/IMG_7007.jpg',
+    image: '/img/rooms/H3/303/optimized/303_bed_1.webp',
     description: 'Comfortable, flexible, and ideal for friends, siblings, colleagues, or guests who prefer individual sleeping spaces.',
     ratePerNight: 4200,
     breakfastCharge: 300,
@@ -84,7 +84,7 @@ export const rooms = [
   {
     name: 'Economy Queen Room',
     kind: 'room',
-    image: '/img/rooms/H3/301/IMG_7044.jpg',
+    image: '/img/rooms/H3/301/optimized/301_bed_1.webp',
     description: 'A simple, comfortable fan-cooled queen room with the essentials for a relaxed stay near South Cliff.',
     ratePerNight: 3400,
     breakfastCharge: 300,
@@ -94,7 +94,7 @@ export const rooms = [
   {
     name: 'Economy Twin Room',
     kind: 'room',
-    image: '/img/rooms/H2/201/IMG_7258.jpg',
+    image: '/img/rooms/H2/201/optimized/201_bed_1.webp',
     description: 'A practical fan-cooled twin room for friends, siblings, and travel companions looking for simple comfort.',
     ratePerNight: 3200,
     breakfastCharge: 300,

@@ -1,220 +1,231 @@
+const azureImages = [
+  '/img/rooms/H1/Property%20Photos/optimized/azure_ext_1.webp',
+  '/img/rooms/H1/Property%20Photos/optimized/azure_living_1.webp',
+  '/img/rooms/H1/Property%20Photos/optimized/azure_living_2.webp',
+  '/img/rooms/H1/Property%20Photos/optimized/azure_kitchen_1.webp',
+  '/img/rooms/H1/Property%20Photos/optimized/azure_dining_1.webp',
+  '/img/rooms/H1/Property%20Photos/optimized/azure_sitout_1.webp',
+  '/img/rooms/H1/Property%20Photos/optimized/azure_balcony_1.webp',
+];
+
+const nookImages = [
+  '/img/rooms/H2/Property%20Photos/optimized/nook_ext_1.webp',
+  '/img/rooms/H2/Property%20Photos/optimized/nook_ext_2.webp',
+  '/img/rooms/H2/Property%20Photos/optimized/nook_ext_3.webp',
+];
+
+const verdantImages = [
+  '/img/rooms/H3/Property%20Photos/optimized/verdant_ext_1.webp',
+  '/img/rooms/H3/Property%20Photos/optimized/verdant_ext_2.webp',
+  '/img/rooms/H3/Property%20Photos/optimized/verdant_living_1.webp',
+  '/img/rooms/H3/Property%20Photos/optimized/verdant_living_2.webp',
+  '/img/rooms/H3/Property%20Photos/optimized/verdant_garden_1.webp',
+  '/img/rooms/H3/Property%20Photos/optimized/verdant_sitout_1.webp',
+  '/img/rooms/H3/Property%20Photos/optimized/verdant_balcony_1.webp',
+];
+
+const room101Images = [
+  '/img/rooms/H1/101/optimized/101_bed_1.webp',
+  '/img/rooms/H1/101/optimized/101_bed_2.webp',
+  '/img/rooms/H1/101/optimized/101_bed_3.webp',
+  '/img/rooms/H1/101/optimized/101_bed_4.webp',
+  '/img/rooms/H1/101/optimized/101_bath_1.webp',
+  '/img/rooms/H1/101/optimized/101_bath_2.webp',
+];
+
+const room102Images = [
+  '/img/rooms/H1/102/optimized/102_bed_1.webp',
+  '/img/rooms/H1/102/optimized/102_bed_2.webp',
+  '/img/rooms/H1/102/optimized/102_bed_3.webp',
+  '/img/rooms/H1/102/optimized/102_bed_4.webp',
+  '/img/rooms/H1/102/optimized/102_bath_1.webp',
+  '/img/rooms/H1/102/optimized/102_bath_2.webp',
+];
+
+const room103Images = [
+  '/img/rooms/H1/103/optimized/103_bed_1.jpg',
+  '/img/rooms/H1/103/optimized/103_bed_2.jpg',
+  '/img/rooms/H1/103/optimized/103_bed_3.jpg',
+  '/img/rooms/H1/103/optimized/103_bed_4.jpg',
+  '/img/rooms/H1/103/optimized/103_bath_1.jpg',
+  '/img/rooms/H1/103/optimized/103_bath_2.jpg',
+];
+
+const room104Images = [
+  '/img/rooms/H1/104/optimized/104_bed_1.webp',
+  '/img/rooms/H1/104/optimized/104_bed_2.webp',
+  '/img/rooms/H1/104/optimized/104_bed_3.webp',
+  '/img/rooms/H1/104/optimized/104_balcony_1.webp',
+  '/img/rooms/H1/104/optimized/104_balcony_2.webp',
+  '/img/rooms/H1/104/optimized/104_bath_1.webp',
+];
+
+const room105Images = [
+  '/img/rooms/H1/105/optimized/105_bed_1.webp',
+  '/img/rooms/H1/105/optimized/105_bed_2.webp',
+  '/img/rooms/H1/105/optimized/105_bed_3.webp',
+  '/img/rooms/H1/105/optimized/105_bath_1.webp',
+  '/img/rooms/H1/105/optimized/105_bath_2.webp',
+];
+
+const room201Images = [
+  '/img/rooms/H2/201/optimized/201_bed_1.webp',
+  '/img/rooms/H2/201/optimized/201_bed_2.webp',
+  '/img/rooms/H2/201/optimized/201_bed_3.webp',
+  '/img/rooms/H2/201/optimized/201_bed_4.webp',
+  '/img/rooms/H2/201/optimized/201_bath_1.webp',
+  '/img/rooms/H2/201/optimized/201_bath_2.webp',
+];
+
+const room203Images = [
+  '/img/rooms/H2/203/optimized/203_bath_1.webp',
+  '/img/rooms/H2/203/optimized/203_bath_2.webp',
+  '/img/rooms/H2/203/optimized/203_bath_3.webp',
+];
+
+const room204Images = [
+  '/img/rooms/H2/204/optimized/204_bed_1.webp',
+  '/img/rooms/H2/204/optimized/204_bed_2.webp',
+  '/img/rooms/H2/204/optimized/204_bed_3.webp',
+  '/img/rooms/H2/204/optimized/204_bath_1.webp',
+  '/img/rooms/H2/204/optimized/204_bath_2.webp',
+];
+
+const room205Images = [
+  '/img/rooms/H2/205/optimized/205_bed_1.webp',
+  '/img/rooms/H2/205/optimized/205_bed_2.webp',
+  '/img/rooms/H2/205/optimized/205_bed_3.webp',
+  '/img/rooms/H2/205/optimized/205_balcony_1.webp',
+  '/img/rooms/H2/205/optimized/205_bath_1.webp',
+  '/img/rooms/H2/205/optimized/205_bath_2.webp',
+];
+
+const room206Images = [
+  '/img/rooms/H2/206/optimized/206_bed_1.webp',
+  '/img/rooms/H2/206/optimized/206_bed_2.webp',
+  '/img/rooms/H2/206/optimized/206_bed_3.webp',
+  '/img/rooms/H2/206/optimized/206_bed_4.webp',
+  '/img/rooms/H2/206/optimized/206_balcony_1.webp',
+  '/img/rooms/H2/206/optimized/206_bath_1.webp',
+];
+
+const room301Images = [
+  '/img/rooms/H3/301/optimized/301_bed_1.webp',
+  '/img/rooms/H3/301/optimized/301_bed_2.webp',
+  '/img/rooms/H3/301/optimized/301_bed_3.webp',
+  '/img/rooms/H3/301/optimized/301_bed_4.webp',
+  '/img/rooms/H3/301/optimized/301_bath_1.webp',
+  '/img/rooms/H3/301/optimized/301_bath_2.webp',
+];
+
+const room302Images = [
+  '/img/rooms/H3/302/optimized/302_bed_1.webp',
+  '/img/rooms/H3/302/optimized/302_bed_2.webp',
+  '/img/rooms/H3/302/optimized/302_bed_3.webp',
+  '/img/rooms/H3/302/optimized/302_bath_1.webp',
+  '/img/rooms/H3/302/optimized/302_bath_2.webp',
+];
+
+const room303Images = [
+  '/img/rooms/H3/303/optimized/303_bed_1.webp',
+  '/img/rooms/H3/303/optimized/303_bed_2.webp',
+  '/img/rooms/H3/303/optimized/303_bed_3.webp',
+  '/img/rooms/H3/303/optimized/303_bath_1.webp',
+  '/img/rooms/H3/303/optimized/303_bath_2.webp',
+];
+
+const room304Images = [
+  '/img/rooms/H3/304/optimized/304_bed_1.webp',
+  '/img/rooms/H3/304/optimized/304_bed_2.webp',
+  '/img/rooms/H3/304/optimized/304_bed_3.webp',
+  '/img/rooms/H3/304/optimized/304_bed_4.webp',
+  '/img/rooms/H3/304/optimized/304_bath_1.webp',
+];
+
+const room305Images = [
+  '/img/rooms/H3/305/optimized/305_bed_1.webp',
+  '/img/rooms/H3/305/optimized/305_bed_2.webp',
+  '/img/rooms/H3/305/optimized/305_bed_3.webp',
+  '/img/rooms/H3/305/optimized/305_bed_4.webp',
+  '/img/rooms/H3/305/optimized/305_bath_1.webp',
+];
+
+const room306Images = [
+  '/img/rooms/H3/306/optimized/306_bed_1.webp',
+  '/img/rooms/H3/306/optimized/306_bed_2.webp',
+  '/img/rooms/H3/306/optimized/306_bed_3.webp',
+  '/img/rooms/H3/306/optimized/306_bed_4.webp',
+  '/img/rooms/H3/306/optimized/306_bath_1.webp',
+];
+
 export const roomImageGalleries = {
-  'The Azure Villa': [
-    '/img/rooms/H1/Property%20Photos/IMG_7318.jpg',
-    '/img/rooms/H1/Property%20Photos/IMG_7320.jpg',
-    '/img/rooms/H1/Property%20Photos/IMG_7321.jpg',
-    '/img/rooms/H1/Property%20Photos/IMG_7423.jpg',
-    '/img/rooms/H1/Property%20Photos/IMG_7482.jpg',
-  ],
-  'The Nook Villa': [
-    '/img/rooms/H2/Property%20Photos/Front.jpg',
-    '/img/rooms/H2/Property%20Photos/IMG_7287.jpg',
-    '/img/rooms/H2/Property%20Photos/IMG_7291.jpg',
-  ],
-  'The Verdant Villa': [
-    '/img/rooms/H3/Property%20Photos/IMG_6871.jpg',
-    '/img/rooms/H3/Property%20Photos/IMG_6874.jpg',
-    '/img/rooms/H3/Property%20Photos/IMG_6875.jpg',
-    '/img/rooms/H3/Property%20Photos/IMG_6877.jpg',
-  ],
+  'The Azure Villa': azureImages,
+  'The Nook Villa': nookImages,
+  'The Verdant Villa': verdantImages,
   'Balcony King Room': [
-    '/img/rooms/H1/104/IMG_7328.jpg',
-    '/img/rooms/H2/206/IMG_7121.jpg',
+    ...room104Images,
+    ...room206Images,
   ],
   'King Room': [
-    '/img/rooms/H1/101/IMG_7418.png',
-    '/img/rooms/H1/101/IMG_7419.png',
-    '/img/rooms/H1/102/IMG_7469.png',
-    '/img/rooms/H1/102/IMG_7472.png',
+    ...room101Images,
+    ...room102Images,
   ],
   'Queen Room': [
-    '/img/rooms/H1/105/IMG_7311.jpg',
-    '/img/rooms/H1/105/IMG_7314.jpg',
-    '/img/rooms/H2/203/IMG_7254.jpg',
-    '/img/rooms/H2/204/IMG_7199.jpg',
-    '/img/rooms/H3/305/IMG_6899.jpg',
+    ...room105Images,
+    ...room203Images,
+    ...room204Images,
+    ...room305Images,
   ],
-  'Balcony Twin Room': [
-    '/img/rooms/H2/205/IMG_7148.jpg',
-    '/img/rooms/H2/205/IMG_7152.jpg',
-  ],
+  'Balcony Twin Room': room205Images,
   'Twin Room': [
-    '/img/rooms/H3/303/IMG_7007.jpg',
-    '/img/rooms/H3/303/IMG_7009.jpg',
-    '/img/rooms/H3/306/IMG_6919.jpg',
+    ...room303Images,
+    ...room306Images,
   ],
-  'Economy Queen Room': [
-    '/img/rooms/H3/301/IMG_7044.jpg',
-    '/img/rooms/H3/301/IMG_7048.jpg',
-    '/img/rooms/H3/301/IMG_7050.jpg',
-    '/img/rooms/H3/301/IMG_7051.jpg',
-  ],
+  'Economy Queen Room': room301Images,
   'Economy Twin Room': [
-    '/img/rooms/H2/201/IMG_7258.jpg',
-    '/img/rooms/H3/302/IMG_7099.jpg',
+    ...room201Images,
+    ...room302Images,
   ],
 };
 
 export const roomUnitImageGalleries = {
-  'AZURE-VILLA': roomImageGalleries['The Azure Villa'],
-  'NOOK-VILLA': roomImageGalleries['The Nook Villa'],
-  'VERDANT-VILLA': roomImageGalleries['The Verdant Villa'],
-  '101': [
-    '/img/rooms/H1/101/IMG_7418.png',
-    '/img/rooms/H1/101/IMG_7419.png',
-    '/img/rooms/H1/101/IMG_7469.png',
-    '/img/rooms/H1/101/IMG_7472.png',
-  ],
-  '102': [
-    '/img/rooms/H1/102/IMG_7418.png',
-    '/img/rooms/H1/102/IMG_7419.png',
-    '/img/rooms/H1/102/IMG_7469.png',
-    '/img/rooms/H1/102/IMG_7472.png',
-  ],
-  '103': [
-    '/img/rooms/H1/103/IMG_7367.jpg',
-    '/img/rooms/H1/103/IMG_7369.jpg',
-    '/img/rooms/H1/103/IMG_9803.jpg',
-    '/img/rooms/H1/103/IMG_9804.jpg',
-  ],
-  '104': [
-    '/img/rooms/H1/104/IMG_7328.jpg',
-    '/img/rooms/H1/104/IMG_7334.jpg',
-  ],
-  '105': [
-    '/img/rooms/H1/105/IMG_7311.jpg',
-    '/img/rooms/H1/105/IMG_7314.jpg',
-  ],
-  'V1-101': [
-    '/img/rooms/H1/101/IMG_7418.png',
-    '/img/rooms/H1/101/IMG_7419.png',
-    '/img/rooms/H1/101/IMG_7469.png',
-    '/img/rooms/H1/101/IMG_7472.png',
-  ],
-  'V1-102': [
-    '/img/rooms/H1/102/IMG_7418.png',
-    '/img/rooms/H1/102/IMG_7419.png',
-    '/img/rooms/H1/102/IMG_7469.png',
-    '/img/rooms/H1/102/IMG_7472.png',
-  ],
-  'V1-103': [
-    '/img/rooms/H1/103/IMG_7367.jpg',
-    '/img/rooms/H1/103/IMG_7369.jpg',
-    '/img/rooms/H1/103/IMG_9803.jpg',
-    '/img/rooms/H1/103/IMG_9804.jpg',
-  ],
-  'V1-104': [
-    '/img/rooms/H1/104/IMG_7328.jpg',
-    '/img/rooms/H1/104/IMG_7334.jpg',
-  ],
-  'V1-105': [
-    '/img/rooms/H1/105/IMG_7311.jpg',
-    '/img/rooms/H1/105/IMG_7314.jpg',
-  ],
-  '201': [
-    '/img/rooms/H2/201/IMG_7258.jpg',
-    '/img/rooms/H2/201/IMG_7263.jpg',
-    '/img/rooms/H2/201/IMG_7264.jpg',
-  ],
-  '202': roomImageGalleries['The Nook Villa'],
-  '203': [
-    '/img/rooms/H2/203/IMG_7254.jpg',
-    '/img/rooms/H2/203/IMG_7256.jpg',
-    '/img/rooms/H2/203/IMG_7257.jpg',
-  ],
-  '204': [
-    '/img/rooms/H2/204/IMG_7199.jpg',
-    '/img/rooms/H2/204/IMG_7203.jpg',
-  ],
-  '205': [
-    '/img/rooms/H2/205/IMG_7148.jpg',
-    '/img/rooms/H2/205/IMG_7152.jpg',
-  ],
-  '206': [
-    '/img/rooms/H2/206/IMG_7121.jpg',
-    '/img/rooms/H2/206/IMG_7125.jpg',
-    '/img/rooms/H2/206/IMG_7127.jpg',
-  ],
-  '301': [
-    '/img/rooms/H3/301/IMG_7044.jpg',
-    '/img/rooms/H3/301/IMG_7048.jpg',
-    '/img/rooms/H3/301/IMG_7050.jpg',
-    '/img/rooms/H3/301/IMG_7051.jpg',
-  ],
-  '302': [
-    '/img/rooms/H3/302/IMG_7099.jpg',
-    '/img/rooms/H3/302/IMG_7102.jpg',
-  ],
-  '303': [
-    '/img/rooms/H3/303/IMG_7007.jpg',
-    '/img/rooms/H3/303/IMG_7009.jpg',
-    '/img/rooms/H3/303/IMG_7074.jpg',
-    '/img/rooms/H3/303/IMG_7075.jpg',
-  ],
-  '304': [
-    '/img/rooms/H3/304/IMG_6843.jpg',
-  ],
-  '305': [
-    '/img/rooms/H3/305/IMG_6899.jpg',
-    '/img/rooms/H3/305/IMG_6900.jpg',
-    '/img/rooms/H3/305/IMG_6903.jpg',
-  ],
-  '306': [
-    '/img/rooms/H3/306/IMG_6919.jpg',
-    '/img/rooms/H3/306/IMG_6922.jpg',
-  ],
-  'V2-201': [
-    '/img/rooms/H2/201/IMG_7258.jpg',
-    '/img/rooms/H2/201/IMG_7263.jpg',
-    '/img/rooms/H2/201/IMG_7264.jpg',
-  ],
-  'V2-202': roomImageGalleries['The Nook Villa'],
-  'V2-203': [
-    '/img/rooms/H2/203/IMG_7254.jpg',
-    '/img/rooms/H2/203/IMG_7256.jpg',
-    '/img/rooms/H2/203/IMG_7257.jpg',
-  ],
-  'V2-204': [
-    '/img/rooms/H2/204/IMG_7199.jpg',
-    '/img/rooms/H2/204/IMG_7203.jpg',
-  ],
-  'V2-205': [
-    '/img/rooms/H2/205/IMG_7148.jpg',
-    '/img/rooms/H2/205/IMG_7152.jpg',
-  ],
-  'V2-206': [
-    '/img/rooms/H2/206/IMG_7121.jpg',
-    '/img/rooms/H2/206/IMG_7125.jpg',
-    '/img/rooms/H2/206/IMG_7127.jpg',
-  ],
-  'V3-301': [
-    '/img/rooms/H3/301/IMG_7044.jpg',
-    '/img/rooms/H3/301/IMG_7048.jpg',
-    '/img/rooms/H3/301/IMG_7050.jpg',
-    '/img/rooms/H3/301/IMG_7051.jpg',
-  ],
-  'V3-302': [
-    '/img/rooms/H3/302/IMG_7099.jpg',
-    '/img/rooms/H3/302/IMG_7102.jpg',
-  ],
-  'V3-303': [
-    '/img/rooms/H3/303/IMG_7007.jpg',
-    '/img/rooms/H3/303/IMG_7009.jpg',
-    '/img/rooms/H3/303/IMG_7074.jpg',
-    '/img/rooms/H3/303/IMG_7075.jpg',
-  ],
-  'V3-304': [
-    '/img/rooms/H3/304/IMG_6843.jpg',
-  ],
-  'V3-305': [
-    '/img/rooms/H3/305/IMG_6899.jpg',
-    '/img/rooms/H3/305/IMG_6900.jpg',
-    '/img/rooms/H3/305/IMG_6903.jpg',
-  ],
-  'V3-306': [
-    '/img/rooms/H3/306/IMG_6919.jpg',
-    '/img/rooms/H3/306/IMG_6922.jpg',
-  ],
+  'AZURE-VILLA': azureImages,
+  'NOOK-VILLA': nookImages,
+  'VERDANT-VILLA': verdantImages,
+  '101': room101Images,
+  '102': room102Images,
+  '103': room103Images,
+  '104': room104Images,
+  '105': room105Images,
+  'V1-101': room101Images,
+  'V1-102': room102Images,
+  'V1-103': room103Images,
+  'V1-104': room104Images,
+  'V1-105': room105Images,
+  '201': room201Images,
+  '202': nookImages,
+  '203': room203Images,
+  '204': room204Images,
+  '205': room205Images,
+  '206': room206Images,
+  '301': room301Images,
+  '302': room302Images,
+  '303': room303Images,
+  '304': room304Images,
+  '305': room305Images,
+  '306': room306Images,
+  'V2-201': room201Images,
+  'V2-202': nookImages,
+  'V2-203': room203Images,
+  'V2-204': room204Images,
+  'V2-205': room205Images,
+  'V2-206': room206Images,
+  'V3-301': room301Images,
+  'V3-302': room302Images,
+  'V3-303': room303Images,
+  'V3-304': room304Images,
+  'V3-305': room305Images,
+  'V3-306': room306Images,
 };
 
 export function getRoomImages(roomName, fallbackImage) {
