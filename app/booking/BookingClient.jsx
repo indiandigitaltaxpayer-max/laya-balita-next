@@ -110,6 +110,28 @@ function AnimatedRoomImages({ images, alt, className = '' }) {
   );
 }
 
+function StaticRoomImage({ images, alt, className = '' }) {
+  const image = images?.[0];
+
+  if (!image) return null;
+
+  return (
+    <span className={`animated-room-images ${className}`}>
+      <img src={image} alt={alt} />
+    </span>
+  );
+}
+
+function getCardImages(room) {
+  return room?.cardImages || room?.images?.slice(0, 5) || (room?.image ? [room.image] : []);
+}
+
+function getUnitPreviewImage(unit, room) {
+  const images = unit?.images || getCardImages(room);
+  const bedImage = images.find((image) => /_bed_1\./.test(image));
+  return bedImage ? [bedImage] : images.slice(0, 1);
+}
+
 export default function BookingClient() {
   const searchParams = useSearchParams();
   const requestedRoomName = searchParams.get('room') || '';
@@ -442,7 +464,7 @@ export default function BookingClient() {
         aria-pressed={isSelected}
       >
         {isRecommended ? <span className="booking-recommendation-badge">Recommended</span> : null}
-        <AnimatedRoomImages images={room.images || [room.image]} alt={room.name} />
+        <AnimatedRoomImages images={getCardImages(room)} alt={room.name} />
         <span className="booking-room-option-body">
           <span className="booking-room-option-title">{room.name}</span>
           <span className="booking-room-rate">{formatCurrency(room.ratePerNight)} / night</span>
@@ -661,7 +683,7 @@ export default function BookingClient() {
                   key={unitCode}
                   onClick={() => selectRoomUnit(unit)}
                 >
-                  <AnimatedRoomImages images={unit.images || selectedRoom.images || [selectedRoom.image]} alt={unitCode} className="unit-room-images" />
+                  <StaticRoomImage images={getUnitPreviewImage(unit, selectedRoom)} alt={unitCode} className="unit-room-images" />
                   <span>{unitCode}</span>
                   <small>{selectedRoomUnits.has(unitId) ? 'Selected' : 'Available'}</small>
                 </button>
@@ -764,7 +786,7 @@ export default function BookingClient() {
           <div className="col-md-8">
               {selectedRooms.length ? (
                 <div className="room-card">
-                  <AnimatedRoomImages images={selectedRoom.images || [selectedRoom.image]} alt={selectedRoom.name} className="selected-room-images" />
+                  <AnimatedRoomImages images={getCardImages(selectedRoom)} alt={selectedRoom.name} className="selected-room-images" />
                   <div className="room-content">
                   <h3>{selectedRooms.length === 1 ? selectedRooms[0].roomName : `${selectedRooms.length} Private Rooms`}</h3>
                   <p>{selectedRooms.length === 1 ? selectedRoom.description : 'Multiple rooms selected for this reservation request.'}</p>
