@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "next dev",
+    "dev:local": "next dev",
+    "dev": "next start",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
