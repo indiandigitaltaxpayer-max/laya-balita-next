@@ -99,6 +99,10 @@ textarea.form-control {
   z-index: 2;
 }
 
+.site-header > .container-fluid > .row {
+  align-items: center;
+}
+
 .menu-open .site-header {
   position: fixed;
 }
@@ -106,6 +110,8 @@ textarea.form-control {
 .site-logo a {
   display: inline-flex;
   align-items: center;
+  width: auto;
+  height: auto;
   font-size: 30px;
   color: #fff;
   font-weight: 700;
@@ -116,8 +122,8 @@ textarea.form-control {
 .site-logo img {
   display: block;
   width: auto;
-  max-width: 150px;
-  height: 58px;
+  max-width: none;
+  height: 100px;
   object-fit: contain;
 }
 
@@ -127,8 +133,8 @@ textarea.form-control {
 
 @media (max-width: 767.98px) {
   .site-logo img {
-    max-width: 118px;
-    height: 46px;
+    max-width: 136px;
+    height: 54px;
   }
 }
 
@@ -2573,6 +2579,20 @@ textarea.form-control {
 .review-list span {
   color: var(--laya-green);
   font-weight: 700;
+}
+
+.review-list span a {
+  color: inherit;
+}
+
+.google-review-status {
+  min-height: 150px;
+  margin: 0 0 24px;
+  padding: 24px;
+  border-radius: 12px;
+  background: #faf7f2;
+  color: #6f6f6f;
+  line-height: 1.65;
 }
 
 .google-review-link {

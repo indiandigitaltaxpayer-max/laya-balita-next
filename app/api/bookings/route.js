@@ -13,7 +13,7 @@ const bookingSchema = z.object({
   selectedRooms: z.array(z.object({
     roomTypeId: z.string().uuid(),
     roomUnitId: z.string().uuid(),
-    guests: z.coerce.number().int().min(1).max(16),
+    guests: z.coerce.number().int().min(1),
   })).min(1).optional(),
   checkIn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   checkOut: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),

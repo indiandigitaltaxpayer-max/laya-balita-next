@@ -5,8 +5,6 @@ import { useSearchParams } from 'next/navigation';
 import { featureIcons, rooms as fallbackRooms } from '../data/rooms';
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const guestOptions = Array.from({ length: 16 }, (_, index) => `${index + 1} Guest${index === 0 ? '' : 's'}`);
-
 function getCurrentMonth() {
   const now = new Date();
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
@@ -148,7 +146,7 @@ export default function BookingClient() {
   const [availabilityError, setAvailabilityError] = useState('');
   const [checkIn, setCheckIn] = useState('');
   const [checkOut, setCheckOut] = useState('');
-  const [guestCount, setGuestCount] = useState('1 Guest');
+  const [guestCount, setGuestCount] = useState('1');
   const [breakfastOpted, setBreakfastOpted] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -609,9 +607,15 @@ export default function BookingClient() {
             </label>
             <label>
               <span>Guests</span>
-              <select value={guestCount} onChange={(event) => setGuestCount(event.target.value)}>
-                {guestOptions.map((option) => <option key={option}>{option}</option>)}
-              </select>
+              <input
+                type="number"
+                min="1"
+                step="1"
+                inputMode="numeric"
+                value={guestCount}
+                onChange={(event) => setGuestCount(event.target.value)}
+                onBlur={() => setGuestCount(String(Math.max(1, getGuestNumber(guestCount))))}
+              />
             </label>
           </div>
         </div>
@@ -709,15 +713,15 @@ export default function BookingClient() {
                   </div>
                   <label>
                     Guests
-                    <select
+                    <input
+                      type="number"
+                      min="1"
+                      step="1"
+                      inputMode="numeric"
                       value={room.guests}
                       onChange={(event) => updateSelectedRoomGuests(room.roomUnitId, event.target.value)}
                       disabled={selectedRoom?.kind === 'villa'}
-                    >
-                      {Array.from({ length: 8 }, (_, index) => index + 1).map((count) => (
-                        <option value={count} key={count}>{count}</option>
-                      ))}
-                    </select>
+                    />
                   </label>
                   {selectedRoom?.kind !== 'villa' ? (
                     <button type="button" onClick={() => removeSelectedRoom(room.roomUnitId)}>
@@ -887,9 +891,17 @@ export default function BookingClient() {
                   </select>
                 </div>
                 <div className="form-group">
-                  <select className="form-control" value={guestCount} onChange={(event) => setGuestCount(event.target.value)}>
-                    {guestOptions.map((option) => <option key={option}>{option}</option>)}
-                  </select>
+                  <input
+                    className="form-control"
+                    type="number"
+                    min="1"
+                    step="1"
+                    inputMode="numeric"
+                    aria-label="Number of guests"
+                    value={guestCount}
+                    onChange={(event) => setGuestCount(event.target.value)}
+                    onBlur={() => setGuestCount(String(Math.max(1, getGuestNumber(guestCount))))}
+                  />
                 </div>
                 {selectedRoom ? (
                   <div className="breakfast-option">

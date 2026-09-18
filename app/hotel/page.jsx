@@ -50,7 +50,7 @@ const villaCards = [
     features: ['Kitchen available', 'Two spacious living halls', 'Open veranda and balconies'],
     button: 'Explore The Azure Villa',
     href: '/hotel/azure-villa',
-    images: ['/img/rooms/H1/Property%20Photos/optimized/azure_ext_1.webp', '/img/rooms/H1/Property%20Photos/optimized/azure_living_1.webp', '/img/rooms/H1/Property%20Photos/optimized/azure_kitchen_1.webp'],
+    images: ['/img/rooms/H1/Property%20Photos/optimized/azure_ext_1.webp', '/img/rooms/H1/101/optimized/101_bed_1.webp', '/img/rooms/H1/102/optimized/102_bed_1.webp'],
   },
   {
     eyebrow: 'THE NOOK VILLA CARD',

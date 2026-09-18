@@ -447,11 +447,14 @@
   text-transform: uppercase;
 }
 
-.selected-room-item select {
+.selected-room-item select,
+.selected-room-item input[type="number"] {
   display: block;
   min-width: 74px;
+  width: 86px;
   height: 38px;
   margin-top: 6px;
+  padding: 0 8px;
   border: 1px solid #d8c9bd;
   border-radius: 8px;
   background: #fff;

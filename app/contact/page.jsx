@@ -1,5 +1,6 @@
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import GoogleReviewsCard from '../components/GoogleReviewsCard';
 
 export const metadata = {
   title: "Contact | Laya Balita",
@@ -115,35 +116,7 @@ export default function Page() {
                 </div>
               </div>
               <div className="col-lg-5">
-                <div className="google-review-box" data-aos="fade-left">
-                  <div className="review-header">
-                    <span className="google-mark">G</span>
-                    <div>
-                      <h3>Google Reviews</h3>
-                      <div className="review-rating">
-                        <strong>4.8</strong>
-                        <span className="review-stars">★★★★★</span>
-                        <span>Demo rating</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="review-list">
-                    <article>
-                      <p>"Peaceful stay near the cliff with beautiful rooms and warm hospitality."</p>
-                      <span>- Guest Review</span>
-                    </article>
-                    <article>
-                      <p>"Clean, calm, and close to the best spots in Varkala. Perfect for a slow weekend."</p>
-                      <span>- Guest Review</span>
-                    </article>
-                    <article>
-                      <p>"Loved the tropical feel, comfortable rooms, and easy access to the beach."</p>
-                      <span>- Guest Review</span>
-                    </article>
-                  </div>
-                  <a className="btn btn-primary btn-block" href={googleMapsUrl} target="_blank" rel="noreferrer">Open on Google Maps</a>
-                  <a className="google-review-link" href={googleMapsUrl} target="_blank" rel="noreferrer">View Google profile and reviews</a>
-                </div>
+                <GoogleReviewsCard fallbackUrl={googleMapsUrl} />
               </div>
             </div>
           </div>
